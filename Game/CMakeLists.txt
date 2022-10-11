@@ -14,7 +14,9 @@ set(source_dir "${CMAKE_CURRENT_SOURCE_DIR}/src")
 file(GLOB_RECURSE vhead "${include_dir}/*/*.h")
 file(GLOB_RECURSE vsrc "${source_dir}/*.cpp")
 
-add_executable(${PROJECT_NAME} ${vhead} ${vsrc})
+add_executable(${PROJECT_NAME} WIN32 ${vhead} ${vsrc})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE VEngine)
 target_include_directories(${PROJECT_NAME} PRIVATE ${include_dir})
+target_include_directories(${PROJECT_NAME} PRIVATE ${VENGINE_HEADERS})
+target_precompile_headers(${PROJECT_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include/pch.h")

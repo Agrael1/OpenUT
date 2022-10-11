@@ -5,6 +5,9 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("Unreal")
 
+include(FetchContent)
+
 # Include sub-projects.
+add_subdirectory ("WinRT")
 add_subdirectory ("VEngine")
 add_subdirectory ("Game")
