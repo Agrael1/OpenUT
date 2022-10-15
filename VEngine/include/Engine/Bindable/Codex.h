@@ -12,7 +12,6 @@ namespace ver
 		template<class T, typename ...Params> requires std::derived_from<T, Bindable>
 		static concurrency::task<std::shared_ptr<T>> ResolveAsync(Graphics& gfx, Params&& ...p)noexcept
 		{
-			co_await winrt::resume_background();
 			co_return co_await Get()._ResolveAsync<T>(gfx, std::forward<Params>(p)...);
 		}
 		static void Trim()noexcept
@@ -28,7 +27,9 @@ namespace ver
 
 			auto it = binds.find(key);
 
-			if (it == binds.end()) {
+			if (it == binds.end()) 
+			{
+				co_await winrt::resume_background();
 				auto pointer = std::make_shared<T>();
 				co_await pointer->InitializeAsync(gfx, std::forward<Params>(p)...);
 				binds.insert({ std::move(key), pointer });
