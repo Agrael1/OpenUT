@@ -11,6 +11,7 @@ namespace ver
 		DXGIInfoManager();
 	public:
 		std::vector<std::string> GetMessages()const;
+		std::string GetMessageDump()const;
 	private:
 		winrt::com_ptr<IDXGIInfoQueue> pDxgiInfoQueue;
 		wil::unique_hmodule lib;

@@ -7,7 +7,6 @@ namespace ver
 {
 	class Keyboard
 	{
-		friend class Window;
 	public:
 		class Event
 		{
@@ -57,7 +56,7 @@ namespace ver
 		void EnableAutorepeat() noexcept;
 		void DisableAutorepeat() noexcept;
 		bool AutorepeatIsEnabled() const noexcept;
-	private:
+	public:
 		void OnKeyPressed(unsigned char keycode) noexcept;
 		void OnKeyReleased(unsigned char keycode) noexcept;
 		void OnChar(char character) noexcept;

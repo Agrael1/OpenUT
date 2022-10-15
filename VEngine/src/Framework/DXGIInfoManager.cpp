@@ -1,4 +1,5 @@
 #include <Framework/DXGIInfoManager.h>
+#include <numeric>
 
 using namespace ver;
 
@@ -13,7 +14,7 @@ DXGIInfoManager::DXGIInfoManager()
 		reinterpret_cast<void*>(GetProcAddress(lib.get(), "DXGIGetDebugInterface"))
 		);
 	winrt::check_pointer(DxgiGetDebugInterface);
-	winrt::throw_hresult(DxgiGetDebugInterface(__uuidof(IDXGIInfoQueue), pDxgiInfoQueue.put_void()));
+	winrt::check_hresult(DxgiGetDebugInterface(__uuidof(IDXGIInfoQueue), pDxgiInfoQueue.put_void()));
 }
 
 std::vector<std::string> DXGIInfoManager::GetMessages() const
@@ -34,4 +35,10 @@ std::vector<std::string> DXGIInfoManager::GetMessages() const
 	}
 	pDxgiInfoQueue->ClearStoredMessages(DXGI_DEBUG_ALL);
 	return messages;
+}
+
+std::string ver::DXGIInfoManager::GetMessageDump() const
+{
+	auto x = GetMessages();
+	return std::accumulate(x.begin(), x.end(), std::string());
 }

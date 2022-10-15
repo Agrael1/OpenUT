@@ -1,5 +1,7 @@
 cmake_minimum_required (VERSION 3.22)
 
+set(PACKAGE_DIR ${CMAKE_BINARY_DIR}/packages)
+
 FetchContent_Declare(
   wil
   GIT_REPOSITORY https://github.com/microsoft/wil.git
@@ -21,11 +23,13 @@ if(NOT NUGET_EXE)
 endif()
 
 exec_program(${NUGET_EXE}
-    ARGS install "Microsoft.Windows.CppWinRT" -OutputDirectory ${CMAKE_BINARY_DIR}/packages)
+    ARGS install "Microsoft.Windows.CppWinRT" -OutputDirectory ${PACKAGE_DIR})
+exec_program(${NUGET_EXE}
+    ARGS install "DXSDK_Missing" -OutputDirectory ${PACKAGE_DIR})
 
 
 
-file(GLOB CPPWINRT_DIRS ${CMAKE_BINARY_DIR}/packages/Microsoft.Windows.CppWinRT.*)
+file(GLOB CPPWINRT_DIRS ${PACKAGE_DIR}/Microsoft.Windows.CppWinRT.*)
 list(LENGTH CPPWINRT_DIRS CPPWINRT_DIRS_L)
 if(${CPPWINRT_DIRS_L} GREATER 1)
     #Sort directories by version in descending order, so the first dir is top version
@@ -42,9 +46,11 @@ else()
     list(GET CPPWINRT_DIRS 0 CPPWINRT_DIR)
 endif()
 
+file(GLOB DXMISS_DIR ${PACKAGE_DIR}/DXSDK_Missing.*)
 
 set(CPPWINRT_PROPS ${CPPWINRT_DIR}/build/native/Microsoft.Windows.CppWinRT.props PARENT_SCOPE)
 set(CPPWINRT_TARGETS ${CPPWINRT_DIR}/build/native/Microsoft.Windows.CppWinRT.targets PARENT_SCOPE)
+set(DXMISSING_HEADERS ${DXMISS_DIR}/Include PARENT_SCOPE)
 set(WIL_HEADERS "${wil_SOURCE_DIR}/include" PARENT_SCOPE)
 set(CPPWINRT ${CPPWINRT_DIR}/bin/cppwinrt.exe)
 

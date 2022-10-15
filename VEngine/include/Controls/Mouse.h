@@ -87,7 +87,7 @@ namespace ver
 		void EnableRaw() noexcept;
 		void DisableRaw() noexcept;
 		bool RawEnabled() const noexcept;
-	private:
+	public:
 		void OnMouseMove(int x, int y) noexcept;
 		void OnMouseLeave() noexcept;
 		void OnMouseEnter() noexcept;

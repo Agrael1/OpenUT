@@ -1,11 +1,31 @@
 #include <Game/App.h>
+#include <iostream>
+#include <ThreadModel.h>
+#include <Framework/Exceptions.h>
 
-int __stdcall wWinMain(
-    _In_ HINSTANCE hInstance,
-    _In_opt_ HINSTANCE hPrevInstance,
-    _In_ LPWSTR lpCmdLine,
-    _In_ int nShowCmd
-)
+winrt::apartment_context ver::ThreadModel::ui_tread;
+
+int main()
 {
-    return UT::App{}.Go();
+    struct a {
+        a() { winrt::init_apartment(); }
+        ~a(){winrt::uninit_apartment();}
+    }lifetime;
+    ver::ThreadModel model;
+
+    try
+    {
+        UT::App a;
+        a.InitializeAsync().get();
+        return a.Go();
+    }
+    catch (const winrt::hresult_error& e)
+    {
+        std::wcerr << e.message().c_str();
+    }
+    catch (const ver::gfx_exception& e)
+    {
+        std::cerr << e.what();
+    }
+    return -1;
 }

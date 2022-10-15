@@ -1,4 +1,6 @@
 #pragma once
+#include <Game/Window.h>
+#include <Engine/Graphics.h>
 
 namespace UT
 {
@@ -9,10 +11,13 @@ namespace UT
 	public:
 		App();
 	public:
+		winrt::IAsyncAction InitializeAsync();
 		int Go();
 	private:
 		void DoFrame(float dt);
 		void ProcessInput(float dt);
 	private:
+		Window wnd;
+		ver::Graphics gfx;
 	};
 }
