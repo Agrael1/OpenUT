@@ -3,7 +3,7 @@
 winrt::IAsyncAction ver::IndexBuffer::InitializeAsync(Graphics& gfx, std::span<const uint32_t> indices)
 {
 	co_await winrt::resume_background();
-	count = indices.size();
+	count = uint32_t(indices.size());
 
 	D3D11_BUFFER_DESC ibd = {};
 	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;

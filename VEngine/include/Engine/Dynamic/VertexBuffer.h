@@ -75,7 +75,6 @@ namespace ver::dv
 		LayoutSpan layout;
 	};
 
-
 	class VertexBuffer
 	{
 	public:
@@ -91,17 +90,48 @@ namespace ver::dv
 		void emplace_back(Params&&... params) noexcept
 		{
 			assert(sizeof...(params) == _layout.count() && "Param count doesn't match number of vertex elements");
-			buffer.resize(buffer.size() + layout.Size());
-			Back().SetAttributeByIndex(0u, std::forward<Params>(params)...);
+			buffer.resize(buffer.size() + _layout.layout_size());
+			back().SetAttributeByIndex(0u, std::forward<Params>(params)...);
 		}
 
 		void reserve(size_t size){ buffer.reserve(buffer.size() + _layout.layout_size() * size); }
 
-		Vertex Back() noexcept{ return Vertex{ buffer.data() + buffer.size() - _layout.layout_size(), layout()}; }
-		Vertex Front() noexcept{ return Vertex{ buffer.data(), layout()}; }
+		Vertex back() noexcept{ return Vertex{ buffer.data() + buffer.size() - _layout.layout_size(), layout()}; }
+		Vertex front() noexcept{ return Vertex{ buffer.data(), layout()}; }
 		Vertex operator[](size_t i)noexcept{ return Vertex{ buffer.data() + _layout.layout_size() * i,layout()}; }
 	private:
 		LayoutSpan _layout;
 		std::vector<std::byte> buffer;
+	};
+
+
+
+	class VertexMultiuffer
+	{
+	public:
+		VertexMultiuffer(LayoutSpan layout, size_t size = 0) noexcept;
+		//VertexMultiuffer(VertexLayout layout, const aiMesh& mesh);
+	public:
+		/*LayoutSpan layout() const noexcept { return _layout; }
+		size_t count()const noexcept { return buffer.size() / _layout.layout_size(); }
+		size_t size() const noexcept { return buffer.size(); }
+		std::span<const std::byte> data()const noexcept { return buffer; }
+
+		template<typename ...Params>
+		void emplace_back(Params&&... params) noexcept
+		{
+			assert(sizeof...(params) == _layout.count() && "Param count doesn't match number of vertex elements");
+			buffer.resize(buffer.size() + layout.Size());
+			Back().SetAttributeByIndex(0u, std::forward<Params>(params)...);
+		}
+
+		void reserve(size_t size) { buffer.reserve(buffer.size() + _layout.layout_size() * size); }
+
+		Vertex Back() noexcept { return Vertex{ buffer.data() + buffer.size() - _layout.layout_size(), layout() }; }
+		Vertex Front() noexcept { return Vertex{ buffer.data(), layout() }; }
+		Vertex operator[](size_t i)noexcept { return Vertex{ buffer.data() + _layout.layout_size() * i,layout() }; }
+	private:
+		LayoutSpan _layout;
+		std::vector<std::byte> buffer;*/
 	};
 }

@@ -1,6 +1,8 @@
 #pragma once
 #include <Game/Window.h>
 #include <Engine/Graphics.h>
+#include <Engine/Render/DeferredRenderGraph.h>
+
 
 namespace UT
 {
@@ -19,5 +21,6 @@ namespace UT
 	private:
 		Window wnd;
 		ver::Graphics gfx;
+		ver::rg::DeferredRenderGraph graph;
 	};
 }

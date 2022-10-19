@@ -57,10 +57,10 @@ namespace ver::dv
 		std::span<const Element> elements;
 	};
 
-	class DynamicVertexLayout
+	class VertexLayout
 	{
 	public:
-		constexpr DynamicVertexLayout() { elements.reserve(size_t(ElementType::Count)); }
+		constexpr VertexLayout() { elements.reserve(size_t(ElementType::Count)); }
 	public:
 		constexpr explicit operator LayoutSpan()const
 		{
@@ -96,7 +96,7 @@ namespace ver::dv
 			return elements[index];
 		}
 
-		constexpr DynamicVertexLayout& append(ElementType Type) noexcept
+		constexpr VertexLayout& append(ElementType Type) noexcept
 		{
 			if (!contains(Type))elements.emplace_back(Type, layout_size());
 			return *this;
@@ -107,7 +107,7 @@ namespace ver::dv
 			return std::ranges::find_if(elements, [type](const Element& e) {return e.type() == type; }) != elements.end();
 		}
 
-		friend constexpr bool operator==(const DynamicVertexLayout& lhs, const DynamicVertexLayout& rhs)
+		friend constexpr bool operator==(const VertexLayout& lhs, const VertexLayout& rhs)
 		{
 			return lhs.elements == rhs.elements;
 		}

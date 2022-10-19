@@ -15,7 +15,7 @@ namespace ver
 		void Bind(Graphics& gfx) noexcept override;
 		uint32_t GetCount() const noexcept { return count; }
 	protected:
-		size_t count = 0;
+		uint32_t count = 0;
 		winrt::com_ptr<ID3D11Buffer> pIndexBuffer;
 	};
 }

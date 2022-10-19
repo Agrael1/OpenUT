@@ -6,12 +6,13 @@ UT::App::App()
 	:wnd(def_width, def_height, "Unreal Tournament"),
 	gfx(wnd.GetWidth(), wnd.GetHeight())
 {
-
+	gfx.SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, float(wnd.GetHeight()) / float(wnd.GetWidth()), 0.5f, 100.0f));
 }
 
 winrt::IAsyncAction UT::App::InitializeAsync()
 {
-	co_await gfx.InitiaizeAsync(wnd.GetHandle());
+	co_await winrt::when_all(gfx.InitializeAsync(wnd.GetHandle()), 
+		graph.InitializeAsync(gfx));
 }
 
 int UT::App::Go()
@@ -29,6 +30,7 @@ void UT::App::DoFrame(float dt)
 	if (!wnd.IsActive())return;
 	ProcessInput(dt);
 
+	graph.Execute(gfx);
 	gfx.EndFrame();
 }
 

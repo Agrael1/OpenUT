@@ -8,6 +8,6 @@ project ("Unreal")
 include(FetchContent)
 
 # Include sub-projects.
-add_subdirectory ("WinRT")
+add_subdirectory ("Plugins")
 add_subdirectory ("VEngine")
 add_subdirectory ("Game")

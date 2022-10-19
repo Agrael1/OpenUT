@@ -31,7 +31,6 @@ void Graphics::DrawIndexed(UINT count) noexcept
 
 winrt::IAsyncAction Graphics::OnResizeAsync(unsigned newwidth, unsigned newheight)
 {
-	pTarget.reset();
 	winrt::check_hresult(pSwap->ResizeBuffers(0, newwidth, newheight, DXGI_FORMAT_UNKNOWN, 0));
 	width = newwidth;
 	height = newheight;
@@ -45,11 +44,7 @@ winrt::IAsyncAction ver::Graphics::CreateBackBufferAsync()
 
 	winrt::com_ptr<ID3D11Texture2D> pBackBuffer;
 	winrt::check_hresult(pSwap->GetBuffer(0, __uuidof(ID3D11Texture2D), pBackBuffer.put_void()));
-	pTarget = std::make_unique<BackBuffer>();
-	auto action = pTarget->InitializeAsync(*this, pBackBuffer.get());
-
-
-	co_await ui_thread; //context requires UI thread
+	auto action = target.InitializeAsync(*this, pBackBuffer.get());
 
 	// viewport always fullscreen (for now)
 	D3D11_VIEWPORT vp{};
@@ -59,11 +54,13 @@ winrt::IAsyncAction ver::Graphics::CreateBackBufferAsync()
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0.0f;
 	vp.TopLeftY = 0.0f;
+
+	co_await ui_thread; //context requires UI thread
 	pContext->RSSetViewports(1u, &vp);
 	co_await action;
 }
 
-winrt::IAsyncAction ver::Graphics::InitiaizeAsync(HWND wnd)
+winrt::IAsyncAction ver::Graphics::InitializeAsync(HWND wnd)
 {
 	DXGI_SWAP_CHAIN_DESC sd = {};
 	sd.BufferDesc.Width = width;
